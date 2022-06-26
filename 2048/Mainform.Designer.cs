@@ -39,6 +39,7 @@
             this.Text = "Form1";
             this.SizeChanged += new System.EventHandler(this.Mainform_SizeChanged);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Mainform_Paint);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Mainform_KeyDown);
             this.ResumeLayout(false);
 
         }

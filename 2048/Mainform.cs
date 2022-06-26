@@ -32,5 +32,25 @@ namespace _2048
         {
             Invalidate();
         }
+
+        private void Mainform_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+            {
+
+            }
+            else if (e.KeyCode == Keys.Left)
+            {
+
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+
+            }
+        }
     }
 }

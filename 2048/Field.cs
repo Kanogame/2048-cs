@@ -16,12 +16,14 @@ namespace _2048
 
         private int cellSize;
         private Rectangle FieldArea;
+        private Config config;
         private Random rd = new Random();
 
         public Field(int fieldSize, int padding)
         {
             this.fieldSize = fieldSize;
             this.padding = padding;
+            config = new Config();
 
             this.data = new int[fieldSize, fieldSize];
         }
@@ -94,25 +96,20 @@ namespace _2048
             createNewFigure();
             int left = FieldArea.X;
             int top = FieldArea.Y;
+            var stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Center;
+            stringFormat.LineAlignment = StringAlignment.Center;
             for (int i = 0; i < fieldSize; i++)
             {
                 for (int j = 0; j < fieldSize; j++)
                 {
-                    /*
-                    string value = d[i, j];
+                    int value = data[i, j];
                     if (value >= 0)
                     {
-                        using (Brush brush = new SolidBrush()
-                        {
-                            g.FillRectangle(
-                                brush,
-                                left + j * cellSize,
-                                top + i * cellSize,
-                                cellSize,
-                                cellSize);
-                        }
+                        var cellRect = new RectangleF(left + j * cellSize, top + i * cellSize, cellSize, cellSize);
+                        g.FillRectangle(new SolidBrush(config.GetColorFromInt(value)), cellRect);
+                        g.DrawString(value.ToString(), new Font("Courier New", 20), new SolidBrush(Color.Black), cellRect, stringFormat);
                     }
-                    */
                     Console.Write(data[i, j] + " ");
                     using (Pen pen = new Pen(Color.FromArgb(215, 215, 215), 3))
                     {
