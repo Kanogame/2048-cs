@@ -35,15 +35,31 @@ namespace _2048
             {
                 return Color.FromArgb(246, 124, 95);
             }
+            else if (value == 64)
+            {
+                return Color.FromArgb(246, 94, 59);
+            }
+            else if (value == 128)
+            {
+                return Color.FromArgb(237, 207, 114);
+            }
+            else if (value == 256)
+            {
+                return Color.FromArgb(237, 204, 97);
+            }
+            else if (value == 512)
+            {
+                return Color.FromArgb(237, 200, 80);
+            }
+            else if (value == 1024)
+            {
+                return Color.FromArgb(237, 197, 63);
+            }
+            else if (value == 2048)
+            {
+                return Color.FromArgb(237, 194, 46);
+            }
             return Color.White;
-/*
-            private static final Color COLOR_64 = Color.rgb(246, 94, 59);
-            private static final Color COLOR_128 = Color.rgb(237, 207, 114);
-            private static final Color COLOR_256 = Color.rgb(237, 204, 97);
-            private static final Color COLOR_512 = Color.rgb(237, 200, 80);
-            private static final Color COLOR_1024 = Color.rgb(237, 197, 63);
-            private static final Color COLOR_2048 = Color.rgb(237, 194, 46);
-*/
         }
     }
 }

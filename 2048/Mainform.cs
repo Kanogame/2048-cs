@@ -19,6 +19,12 @@ namespace _2048
         {
             InitializeComponent();
             game = new Game(ClientSize);
+            game.RepaintRequired += Game_RepaintRequaried;
+        }
+
+        private void Game_RepaintRequaried()
+        {
+            Invalidate();
         }
 
         private void Mainform_Paint(object sender, PaintEventArgs e)
@@ -35,22 +41,7 @@ namespace _2048
 
         private void Mainform_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Up)
-            {
-
-            }
-            else if (e.KeyCode == Keys.Left)
-            {
-
-            }
-            else if (e.KeyCode == Keys.Right)
-            {
-
-            }
-            else if (e.KeyCode == Keys.Down)
-            {
-
-            }
+            game.KeyMagager(e.KeyCode);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace _2048
 {
@@ -19,6 +20,8 @@ namespace _2048
         private Config config;
         private Random rd = new Random();
 
+        public event KeyPressedDelegate KeyPressedEvent;
+
         public Field(int fieldSize, int padding)
         {
             this.fieldSize = fieldSize;
@@ -28,12 +31,190 @@ namespace _2048
             this.data = new int[fieldSize, fieldSize];
         }
 
+        private void InvokeKeyPressed()
+        {
+            if (KeyPressedEvent != null)
+            {
+                KeyPressedEvent();
+            }
+        }
+
+        public void keyPressed(KeyState keyState)
+        {
+            move(keyState);
+            merge(keyState);
+            move(keyState);
+            createNewFigure();
+            InvokeKeyPressed();
+
+        }
+
+        public void merge(KeyState keyState)
+        {
+            if (keyState == KeyState.down)
+            {
+                for (int i = 0; i < fieldSize; i++)
+                {
+                    for (int j = 0; j < fieldSize - 1; j++)
+                    {
+                        if (data[j, i] != 0)
+                        {
+                            if (data[j, i] == data[j + 1, i])
+                            {
+                                int value = data[j, i] * 2;
+                                data[j, i] = 0;
+                                data[j + 1, i] = value;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (keyState == KeyState.up)
+            {
+                for (int i = 0; i < fieldSize; i++)
+                {
+                    for (int j = 1; j < fieldSize; j++)
+                    {
+                        if (data[j, i] != 0)
+                        {
+                            if (data[j, i] == data[j - 1, i])
+                            {
+                                int value = data[j, i] * 2;
+                                data[j, i] = 0;
+                                data[j - 1, i] = value;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (keyState == KeyState.right)
+            {
+                for (int i = 0; i < fieldSize - 1; i++)
+                {
+                    for (int j = 0; j < fieldSize; j++)
+                    {
+                        if (data[j, i] != 0)
+                        {
+                            if (data[j, i] == data[j, i + 1])
+                            {
+                                int value = data[j, i] * 2;
+                                data[j, i] = 0;
+                                data[j, i + 1] = value;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (keyState == KeyState.left)
+            {
+                for (int i = 1; i < fieldSize; i++)
+                {
+                    for (int j = 0; j < fieldSize; j++)
+                    {
+                        if (data[j, i] != 0)
+                        {
+                            if (data[j, i] == data[j, i - 1])
+                            {
+                                int value = data[j, i] * 2;
+                                data[j, i] = 0;
+                                data[j, i - 1] = value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void move(KeyState keyState)
+        {
+            if (keyState == KeyState.down)
+            {
+                for (int i = 0; i < fieldSize; i++)
+                {
+                    for (int j = 0; j < fieldSize -1; j++)
+                    {
+                        if (data[j, i] != 0)
+                        {
+                            while (data[j + 1, i] == 0)
+                            {
+                                data[j + 1, i] = data[j, i];
+                                data[j, i] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            if (keyState == KeyState.up)
+            {
+                for (int i = 0; i < fieldSize; i++)
+                {
+                    for (int j = 1; j < fieldSize; j++)
+                    {
+                        if (data[j, i] != 0)
+                        {
+                            while (data[j - 1, i] == 0)
+                            {
+                                data[j - 1, i] = data[j, i];
+                                data[j, i] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            if (keyState == KeyState.right)
+            {
+                for (int i = 0; i < fieldSize - 1; i++)
+                {
+                    for (int j = 0; j < fieldSize; j++)
+                    {
+                        if (data[j, i] != 0)
+                        {
+                            while (data[j, i + 1] == 0)
+                            {
+                                data[j, i + 1] = data[j, i];
+                                data[j, i] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            if (keyState == KeyState.left)
+            {
+                for (int i = 1; i < fieldSize; i++)
+                {
+                    for (int j = 0; j < fieldSize; j++)
+                    {
+                        if (data[j, i] != 0)
+                        {
+                            while (data[j, i - 1] == 0)
+                            {
+                                data[j, i - 1] = data[j, i];
+                                data[j, i] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public void createNewFigure()
         {
-            int x = rd.Next(0, fieldSize - 1);
-            int y = rd.Next(0, fieldSize - 1);
+            int x;
+            int y;
+            int count = 0;
+            do
+            {
+                x = rd.Next(0, fieldSize);
+                y = rd.Next(0, fieldSize);
+                count++;
+                if (count > 100)
+                {
+                    break;
+                }
+            } while (data[x, y] != 0);
             if (data[x, y] == 0)
             {
+                count = 0;
                 int val = rd.Next(0, 10);
                 if (val >= 9)
                 {
@@ -93,7 +274,6 @@ namespace _2048
 
         public void display(Graphics g, Size containerSize)
         {
-            createNewFigure();
             int left = FieldArea.X;
             int top = FieldArea.Y;
             var stringFormat = new StringFormat();
